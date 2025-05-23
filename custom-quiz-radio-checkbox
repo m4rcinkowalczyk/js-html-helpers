@@ -1,0 +1,61 @@
+<html>
+<body>
+
+<div class="d-flex align-items-center pb-4">
+        <div>
+            <input type="radio" class="custom p1" value="1" id="p1o1" name="p1[]" />
+        </div>
+        <div>
+            <label for="p1o2" class="flex-label">
+                <div class="pl-2">A) ANSWER 1</div>
+            </label>
+        </div>
+    </div>
+</body>
+
+
+<script type="text/javascript">
+$(window).load(function() {
+  $('.custom').each(function() {
+    var $this = $(this);
+
+    // Tworzymy nowe elementy obrazu
+    var $uncheckedImg = $('<img src="images/unchecked.png" class="unchecked">');
+    var $checkedImg = $('<img src="images/checked.png" class="checked" style="display: none">');
+
+    // Dodajemy obrazy do etykiety
+    var $label = $('label[for=' + $this.attr('id') + ']');
+    $label.prepend($uncheckedImg, $checkedImg);
+
+    // Aktualizujemy obrazy na podstawie stanu input
+    updateImages($this, $uncheckedImg, $checkedImg);
+
+    // Aktualizujemy obrazy, gdy stan input się zmienia
+    $this.change(function() {
+        if ($this.attr('type') === 'radio') {
+            $('input[name="' + $this.attr('name') + '"]').each(function() {
+                var $radio = $(this);
+                var $radioLabel = $('label[for=' + $radio.attr('id') + ']');
+                updateImages($radio, $radioLabel.find('.unchecked'), $radioLabel
+                    .find('.checked'));
+            });
+        } else {
+            updateImages($this, $uncheckedImg, $checkedImg);
+        }
+    });
+});
+  
+  
+  function updateImages($input, $uncheckedImg, $checkedImg) {
+      if ($input.is(':checked')) {
+          $uncheckedImg.hide();
+          $checkedImg.show();
+      } else {
+  
+          $uncheckedImg.show();
+          $checkedImg.hide();
+      }
+  }
+});
+</script>
+</html>
