@@ -1,0 +1,32 @@
+document.addEventListener("DOMContentLoaded", function() {
+  function scaleImageMap() {
+    const img = document.querySelector('.responsive-image');
+    const map = document.querySelector('map[name="map"]');
+    const areas = map.querySelectorAll('area');
+
+    if (!img.naturalWidth) return; // Sprawdź, czy obraz jest załadowany
+
+    const scaleX = img.offsetWidth / img.naturalWidth;
+    const scaleY = img.offsetHeight / img.naturalHeight;
+    
+    areas.forEach(area => {
+      const coords = area.dataset.originalCoords.split(',');
+      const scaledCoords = coords.map((coord, index) =>
+        Math.round(index % 2 === 0 ? coord * scaleX : coord * scaleY)
+      );
+      area.coords = scaledCoords.join(',');
+    });
+  }
+
+  // Zapisz oryginalne współrzędne w data-original-coords
+  const areas = document.querySelectorAll('map[name="map"] area');
+  areas.forEach(area => {
+    if (!area.dataset.originalCoords) {
+      area.dataset.originalCoords = area.coords;
+    }
+  });
+
+  // Skaluj mapę na starcie i przy zmianie rozmiaru
+  window.addEventListener('resize', scaleImageMap);
+  scaleImageMap();
+});
